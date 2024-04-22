@@ -8,17 +8,27 @@ function LocationMarker() {
   const map = useMapEvents({
     click(e){
       const {lat,lng} = e.latlng;
-      const coord  = [
+      const point = {
+        coord:[] ,
+        desc:undefined,
+      }
+      point.coord  = [
         lat,lng
       ];
-      addMarkerPosition([...markerPositionArr,coord]);
+      const userInput = prompt('Describe the place:');
+      point.desc = userInput;
+      addMarkerPosition([...markerPositionArr,point]);
     },
   });
 
   return  (
     markerPositionArr.length > 0 &&
     markerPositionArr.map((position, index) => (
-      <Marker  position={markerPositionArr[index]} />
+      <Marker  position={markerPositionArr[index].coord}>
+          <Popup>
+            {markerPositionArr[index].desc}
+          </Popup>
+      </Marker>
     ))
  )
 }
@@ -29,7 +39,7 @@ function App() {
   return (
     <div className="App">
       <h1>Leaflet Map with React</h1>
-      <MapContainer center={[26.867667, 75.807973]} zoom={13} scrollWheelZoom={false} style={{ height: '400px', width: '100%' }}>
+      <MapContainer center={[26.867667, 75.807973]} zoom={13} scrollWheelZoom={true} style={{ height: '400px', width: '100%' }}>
   <TileLayer
     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
